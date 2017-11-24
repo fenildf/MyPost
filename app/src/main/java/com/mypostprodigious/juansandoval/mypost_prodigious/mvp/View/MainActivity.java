@@ -5,8 +5,11 @@ import android.support.test.espresso.IdlingResource;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mypostprodigious.juansandoval.mypost_prodigious.App;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
     private ListView listView;
     private ArrayList<String> list;
     private ArrayAdapter<String> adapter;
+    private TextView textView;
 
     @Inject
     AppRepository repository;
@@ -42,13 +46,13 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
         App.getAppComponent().inject(this);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         listView = (ListView) findViewById(R.id.my_list_view);
+        textView = (TextView) findViewById(R.id.simple_post_item);
         swipeContainer.setOnRefreshListener(this);
         list = new ArrayList<>();
 
         new MainScreenPresenter(repository, this);
 
         mPresenter.loadPostFromRemoteDataStore();
-
     }
 
     @Override
@@ -83,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
                     swipeContainer.setRefreshing(false);
                 }
             });
+    }
+
+    @Override
+    public void showOnLongFavorites() {
+
     }
 
     @Override

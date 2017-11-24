@@ -14,11 +14,15 @@ public interface MainScreenContract {
         void showError(String message);
 
         void showComplete();
+
+        void showOnLongFavorites();
     }
 
     interface Presenter extends BasePresenter {
         void loadPost();
 
         void loadPostFromRemoteDataStore();
+
+        void onLongFavorites();
     }
 }
