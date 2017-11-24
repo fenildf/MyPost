@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
 
         new MainScreenPresenter(repository, this);
 
+        mPresenter.loadPostFromRemoteDataStore();
+
     }
 
     @Override
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
     @Override
     public void showComplete() {
         Toast.makeText(this, "Completed loading", Toast.LENGTH_SHORT).show();
-
         if (swipeContainer != null)
             swipeContainer.post(new Runnable() {
                 @Override
@@ -103,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
 
     @Override
     public void onRefresh() {
-        mPresenter.loadPostFromRemoteDatatore();
+        Toast.makeText(this, "Refresh Completed", Toast.LENGTH_SHORT).show();
+        mPresenter.loadPostFromRemoteDataStore();
     }
 
     @VisibleForTesting

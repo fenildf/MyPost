@@ -41,7 +41,7 @@ public class MainScreenPresenter implements MainScreenContract.Presenter {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "Complete");
-                        mView.showComplete();
+                        //mView.showComplete();
                     }
 
                     @Override
@@ -58,7 +58,7 @@ public class MainScreenPresenter implements MainScreenContract.Presenter {
     }
 
     @Override
-    public void loadPostFromRemoteDatatore() {
+    public void loadPostFromRemoteDataStore() {
         new AppRemoteDataStore().getPost().observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new Observer<List<Post>>() {
