@@ -1,16 +1,18 @@
 package com.mypostprodigious.juansandoval.mypost_prodigious.mvp.View;
 
+import android.os.Handler;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mypostprodigious.juansandoval.mypost_prodigious.App;
 import com.mypostprodigious.juansandoval.mypost_prodigious.R;
+import com.mypostprodigious.juansandoval.mypost_prodigious.Utils.Constants;
 import com.mypostprodigious.juansandoval.mypost_prodigious.Utils.EspressoIdlingResource;
 import com.mypostprodigious.juansandoval.mypost_prodigious.mvp.DaggerMainScreenComponent;
 import com.mypostprodigious.juansandoval.mypost_prodigious.mvp.MainScreenContract;
@@ -28,14 +30,31 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
     ListView listView;
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
+    Constants constants;
 
     @Inject MainScreenPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        constants = new Constants();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.my_list_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter = new ArrayAdapter<String>(MainActivity.this, R.layout.simple_post_item, list);
+                        listView.setAdapter(adapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, constants.REFRESH_DELAY);
+            }
+        });
         list = new ArrayList<>();
         DaggerMainScreenComponent.builder()
                 .netComponent(((App) getApplicationContext()).getNetComponent())
@@ -57,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
             list.add(posts.get(i).getTitle());
         }
         //Create the array adapter and set it to list view
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        adapter = new ArrayAdapter<String>(MainActivity.this, R.layout.simple_post_item, list);
         listView.setAdapter(adapter);
         //Decrement after loading the posts
         EspressoIdlingResource.decrement();
@@ -74,9 +93,7 @@ public class MainActivity extends AppCompatActivity implements MainScreenContrac
 
     @Override
     public void showComplete() {
-        //Show completed message Toast
         Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_SHORT).show();
-
     }
 
     @VisibleForTesting
