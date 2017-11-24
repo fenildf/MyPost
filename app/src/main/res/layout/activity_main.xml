@@ -42,14 +42,14 @@
                 android:layout_height="@dimen/main_image_size"
                 android:src="@drawable/ic_adb"/>
 
-            <android.support.v7.widget.RecyclerView
+            <ListView
                 android:id="@+id/my_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/md_grey_50"
                 android:orientation="vertical">
 
-            </android.support.v7.widget.RecyclerView>
+            </ListView>
 
         </LinearLayout>
 
