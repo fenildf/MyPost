@@ -1,9 +1,8 @@
-package com.mypostprodigious.juansandoval.mypost_prodigious.MVP.Model;
+package com.mypostprodigious.juansandoval.mypost_prodigious.mvp.Model;
 
 
 public class Post {
     private final Integer userId;
-
     private final Integer id;
     private final String title;
     private final String body;
