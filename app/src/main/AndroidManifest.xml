@@ -19,6 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".Data.Local.Provider"
+            android:authorities="com.mypostprodigious.juansandoval.mypost_prodigious"
+            android:exported="false"
+            android:syncable="true"/>
+
     </application>
 
 </manifest>

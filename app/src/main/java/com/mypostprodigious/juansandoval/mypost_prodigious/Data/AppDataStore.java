@@ -1,13 +1,13 @@
 package com.mypostprodigious.juansandoval.mypost_prodigious.Data;
 
-
-import android.database.Observable;
-
-import com.mypostprodigious.juansandoval.mypost_prodigious.Data.Local.DatabaseContract;
+import com.mypostprodigious.juansandoval.mypost_prodigious.mvp.Model.Post;
 
 import java.util.List;
 
+import rx.Observable;
+
+
 public interface AppDataStore {
 
-    Observable<List<DatabaseContract.Post>> getPost();
+    Observable<List<Post>> getPost();
 }

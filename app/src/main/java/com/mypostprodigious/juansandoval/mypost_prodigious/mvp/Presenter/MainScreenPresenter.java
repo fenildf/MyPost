@@ -1,52 +1,53 @@
 package com.mypostprodigious.juansandoval.mypost_prodigious.mvp.Presenter;
 
+import android.util.Log;
 
+
+import com.mypostprodigious.juansandoval.mypost_prodigious.Data.AppRepository;
+import com.mypostprodigious.juansandoval.mypost_prodigious.Data.Remote.AppRemoteDataStore;
 import com.mypostprodigious.juansandoval.mypost_prodigious.mvp.MainScreenContract;
 import com.mypostprodigious.juansandoval.mypost_prodigious.mvp.Model.Post;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.http.GET;
+/**
+ * Created by Aditya on 23-Oct-16.
+ */
 
 public class MainScreenPresenter implements MainScreenContract.Presenter {
 
-    public Retrofit retrofit;
-    MainScreenContract.View mView;
+    private static final String TAG = MainScreenPresenter.class.getSimpleName();
+    private Subscription mSubscription;
+    private AppRepository mAppRepository;
+    private MainScreenContract.View mView;
 
-    @Inject
-    public MainScreenPresenter(Retrofit retrofit, MainScreenContract.View mView) {
-        this.retrofit = retrofit;
+    public MainScreenPresenter(AppRepository mAppRepository, MainScreenContract.View mView) {
+        this.mAppRepository = mAppRepository;
         this.mView = mView;
+        mView.setPresenter(this);
     }
 
     @Override
     public void loadPost() {
-        retrofit.create(PostService.class).getPostList().subscribeOn(Schedulers.io())
+        mSubscription = mAppRepository.getPost()
                 .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .subscribe(new Observer<List<Post>>() {
-
                     @Override
-                    public void onError(Throwable e) {
-                        mView.showError(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onCompleted() {
+                        Log.d(TAG, "Complete");
                         mView.showComplete();
                     }
 
                     @Override
-                    public void onSubscribe(Disposable d) {
-
+                    public void onError(Throwable e) {
+                        Log.d(TAG, e.toString());
+                        mView.showError(e.toString());
                     }
 
                     @Override
@@ -56,8 +57,40 @@ public class MainScreenPresenter implements MainScreenContract.Presenter {
                 });
     }
 
-    public interface PostService {
-        @GET("/posts")
-        Observable<List<Post>> getPostList();
+    @Override
+    public void loadPostFromRemoteDatatore() {
+        new AppRemoteDataStore().getPost().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Observer<List<Post>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "Complete");
+                        mView.showComplete();
+                        loadPost();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, e.toString());
+                        mView.showError(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(List<Post> posts) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void subscribe() {
+        loadPost();
+    }
+
+    @Override
+    public void unsubscribe() {
+        //Unsubscribe Rx subscription
+        if (mSubscription != null && mSubscription.isUnsubscribed())
+            mSubscription.unsubscribe();
     }
 }
