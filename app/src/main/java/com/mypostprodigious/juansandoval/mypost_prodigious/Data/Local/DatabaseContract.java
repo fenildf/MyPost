@@ -24,7 +24,7 @@ public class DatabaseContract {
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_URI_STRING);
 
         public static final String CONTENT_USER_TYPE = "" + CONTENT_AUTHORITY + "/" + PATH_POST;
-        public static final String CONTENT_URER_ITEM_TYPE = "" + CONTENT_AUTHORITY + "/" + PATH_POST;
+        public static final String CONTENT_USER_ITEM_TYPE = "" + CONTENT_AUTHORITY + "/" + PATH_POST;
 
         public static final String TABLE_NAME = "";
 
