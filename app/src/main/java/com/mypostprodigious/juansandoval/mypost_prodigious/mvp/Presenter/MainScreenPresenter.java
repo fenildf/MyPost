@@ -83,12 +83,6 @@ public class MainScreenPresenter implements MainScreenContract.Presenter {
     }
 
     @Override
-    public void onLongFavorites() {
-        mView.showOnLongFavorites();
-
-    }
-
-    @Override
     public void subscribe() {
         loadPost();
     }

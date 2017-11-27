@@ -20,6 +20,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".mvp.View.FavoriteListActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
         <provider
             android:name=".Data.Local.Provider"
             android:authorities="com.mypostprodigious.juansandoval.mypost_prodigious"

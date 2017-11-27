@@ -6,6 +6,7 @@ import com.pushtorefresh.storio.contentresolver.annotations.StorIOContentResolve
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
+
 @StorIOSQLiteType(table = DatabaseContract.Post.TABLE_NAME)
 @StorIOContentResolverType(uri = DatabaseContract.Post.CONTENT_URI_STRING)
 public class Post {
@@ -34,7 +35,7 @@ public class Post {
     }
 
     public Post() {
-
+        super();
     }
 
     public Integer getId() {
@@ -67,6 +68,20 @@ public class Post {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Post other = (Post) obj;
+        if (id != other.id)
+            return false;
+        return true;
     }
 
 }

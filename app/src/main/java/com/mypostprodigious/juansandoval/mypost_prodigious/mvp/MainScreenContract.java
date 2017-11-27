@@ -15,7 +15,6 @@ public interface MainScreenContract {
 
         void showComplete();
 
-        void showOnLongFavorites();
     }
 
     interface Presenter extends BasePresenter {
@@ -23,6 +22,5 @@ public interface MainScreenContract {
 
         void loadPostFromRemoteDataStore();
 
-        void onLongFavorites();
     }
 }
